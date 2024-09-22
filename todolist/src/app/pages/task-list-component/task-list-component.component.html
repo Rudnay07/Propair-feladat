@@ -1,0 +1,52 @@
+<div class="container-wrapper">
+  <div class="container">
+    <h2>To do</h2>
+    <div cdkDropList #todoList="cdkDropList" id="todoList" [cdkDropListData]="todoTasks" [cdkDropListConnectedTo]="[inProgressList, doneList]" class="list" (cdkDropListDropped)="drop($event)">
+      <div class="box todo" *ngFor="let item of todoTasks; trackBy: trackByFn" cdkDrag [cdkDragData]="item" (dblclick)="openTaskDetails(item)">
+        <div *ngIf="selectedTask !== item">
+          {{ item.title }}
+        </div>
+        <input *ngIf="selectedTask === item" [(ngModel)]="item.title" (blur)="saveTask(item)" />
+        <button *ngIf="item.status === 'todo'" (click)="deleteTask(item.id)">🗑️</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>In Progress</h2>
+    <div cdkDropList #inProgressList="cdkDropList" id="inProgressList" [cdkDropListData]="inProgressTasks" [cdkDropListConnectedTo]="[todoList, doneList]" class="list" (cdkDropListDropped)="drop($event)">
+      <div class="box in-progress" *ngFor="let item of inProgressTasks; trackBy: trackByFn" cdkDrag [cdkDragData]="item" (dblclick)="openTaskDetails(item)">
+        <div *ngIf="selectedTask !== item">
+          {{ item.title }}
+        </div>
+        <input *ngIf="selectedTask === item" [(ngModel)]="item.title" (blur)="saveTask(item)" />
+        <button *ngIf="item.status === 'in-progress'" (click)="deleteTask(item.id)">🗑️</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Done</h2>
+    <div cdkDropList #doneList="cdkDropList" id="doneList" [cdkDropListData]="completedTasks" [cdkDropListConnectedTo]="[todoList, inProgressList]" class="list" (cdkDropListDropped)="drop($event)">
+      <div class="box completed" *ngFor="let item of completedTasks; trackBy: trackByFn" cdkDrag [cdkDragData]="item" (dblclick)="openTaskDetails(item)">
+        <div *ngIf="selectedTask !== item">
+          {{ item.title }}
+        </div>
+        <input *ngIf="selectedTask === item" [(ngModel)]="item.title" (blur)="saveTask(item)" />
+      </div>
+    </div>
+  </div>
+
+  <button (click)="clearLocalStorage()">Törlés</button>
+
+  <!-- Modal -->
+  <div class="modal" *ngIf="selectedTask" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h1>Task Details</h1>
+      <p><strong>Title:</strong> {{ selectedTask.title }}</p>
+      <p><strong>Description:</strong> <span (dblclick)="editDescription(selectedTask)">{{ selectedTask.description || 'No description provided.' }}</span></p>
+      <p><strong>Status:</strong> {{ selectedTask.status }}</p>
+      <button (click)="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
