@@ -5,16 +5,19 @@ import { TaskService } from '../../task/task.service';
 import { Task } from '../../task/task.model';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MenubarModule } from 'primeng/menubar';
+import { MenuItem } from 'primeng/api'; 
 
 @Component({
   selector: 'app-new-task',
   standalone: true,
-  imports: [ButtonModule, ReactiveFormsModule, CommonModule],
+  imports: [ButtonModule, ReactiveFormsModule, CommonModule, MenubarModule],
   templateUrl: './new-task-component.component.html',
   styleUrls: ['./new-task-component.component.css']
 })
 export class NewTaskComponent implements OnInit {
   taskForm: FormGroup;
+  items: MenuItem[] = []; 
 
   constructor(private fb: FormBuilder, private taskService: TaskService) {
     this.taskForm = this.fb.group({
@@ -24,7 +27,26 @@ export class NewTaskComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.items = [
+      {
+        label: 'TODOS',
+        icon: 'pi pi-briefcase',
+        items: [
+          {
+            label: 'TODO-LIST',
+            icon: 'pi pi-cog',
+            routerLink: '/'
+          },
+          {
+            label: 'NEW TODO',
+            icon: 'pi pi-th-large',
+            routerLink: '/new-task'
+          }
+        ]
+      }
+    ];
+  }
   onSubmit() {
     if (this.taskForm.valid) {
       const newTask: Task = {

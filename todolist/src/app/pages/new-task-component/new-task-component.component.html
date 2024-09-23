@@ -1,3 +1,7 @@
+<div class="menu-bar-wrapper"></div>
+  <div class="card">
+    <p-menubar [model]="items"></p-menubar>
+  </div>
 <div class="container mx-auto">
   <h1 class="text-3xl font-bold mb-4">Add New Task</h1>
   <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">

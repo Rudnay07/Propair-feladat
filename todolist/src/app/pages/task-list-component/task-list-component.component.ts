@@ -5,11 +5,13 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { CommonModule } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule } from '@angular/forms';
+import { MenubarModule } from 'primeng/menubar';
+import { MenuItem } from 'primeng/api'; 
 
 @Component({
   selector: 'app-task-list-component',
   standalone: true,
-  imports: [CommonModule, DragDropModule, FormsModule],
+  imports: [CommonModule, DragDropModule, FormsModule, MenubarModule],
   templateUrl: './task-list-component.component.html',
   styleUrls: ['./task-list-component.component.css']
 })
@@ -19,6 +21,7 @@ export class TaskListComponentComponent implements OnInit {
   inProgressTasks: Task[] = [];
   completedTasks: Task[] = [];
   selectedTask: Task | null = null;
+  items: MenuItem[] = []; 
 
   constructor(private taskService: TaskService) {}
 
@@ -27,6 +30,26 @@ export class TaskListComponentComponent implements OnInit {
       this.tasks = tasks;
       this.filterTasks();
     });
+
+    
+    this.items = [
+      {
+        label: 'TODOS',
+        icon: 'pi pi-briefcase',
+        items: [
+          {
+            label: 'TODO-LIST',
+            icon: 'pi pi-cog',
+            routerLink: '/'
+          },
+          {
+            label: 'NEW TODO',
+            icon: 'pi pi-th-large',
+            routerLink: '/new-task'
+          }
+        ]
+      }
+    ];
   }
 
   openTaskDetails(task: Task) {
